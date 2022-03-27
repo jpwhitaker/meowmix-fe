@@ -13,12 +13,10 @@ const PodcastDisplay = function(podcast){
 }
 
 const SearchBox = function(){
-
   const [podcastTitle, setPodcastTitle] = useState('')
   const [podcastData, setPodcastData] = useState([])
   const [debounceTitle] = useDebounce(podcastTitle, 500)
   const [podcastResults, setPodcastResults] = useState([])  
-
   const appleURL = `https://itunes.apple.com/search?`
 
   useEffect(
@@ -35,9 +33,7 @@ const SearchBox = function(){
     () => {
       setPodcastResults(
         () => {
-          
           return podcastData?.results?.map((podcast)=>{
-            
             return PodcastDisplay(podcast)
           })
         }
@@ -54,13 +50,13 @@ const SearchBox = function(){
         onChange={(e) => {
           setPodcastTitle(e.target.value);
         }}
+        className="border border-gray-300"
       ></input>
 
-      <p>{podcastResults}</p>
+      <div className="flex">{podcastResults}</div>
     </div>
   )
 }
-
 
 export default function Home() {
   return (
@@ -69,9 +65,8 @@ export default function Home() {
         <title>{siteTitle}</title>
       </Head>
       <section className={utilStyles.headingMd}>
-        <p>Welcome to MeowMix from JP</p>
+        <p>Welcome to MeowMix</p>
         <SearchBox/>
-
       </section>
     </Layout>
   )
