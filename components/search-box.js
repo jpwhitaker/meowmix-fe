@@ -11,10 +11,12 @@ export default function SearchBox() {
 
   useEffect(
     () => {
-      axios.get(`${appleURL}entity=podcast&term=${debounceTitle}&limit=6`)
-      .then((response) => {
-        setPodcastData(response.data.results);
-      })
+      if (debounceTitle.length > 0){
+        axios.get(`${appleURL}entity=podcast&term=${debounceTitle}&limit=6`)
+        .then((response) => {
+          setPodcastData(response.data.results);
+        })
+      }
     },
     [debounceTitle]
   )
