@@ -1,25 +1,36 @@
 import { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
+import useSWR from 'swr'
+
 import {useDebounce} from 'use-debounce'
 import {PodcastContext} from '../pages/index'
+
+const appleURL = `https://itunes.apple.com/search?`
+const fetcher = (...args) => fetch(...args).then(res => res.json())
+
+function usePodcast (searchTerm) {
+
+
+  const { data, error } = useSWR(`${appleURL}entity=podcast&term=${searchTerm}&limit=6&domain=${window.location.host}`, fetcher)
+  return {
+    podcasts: data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
 
 export default function SearchBox() {
   const [podcastTitle, setPodcastTitle] = useState('')
   const [debounceTitle] = useDebounce(podcastTitle, 500)
-  const appleURL = `https://itunes.apple.com/search?`
   const {podcastData, setPodcastData} = useContext(PodcastContext)
-
-  useEffect(
-    () => {
-      if (debounceTitle.length > 0){
-        axios.get(`${appleURL}entity=podcast&term=${debounceTitle}&limit=6`)
-        .then((response) => {
-          setPodcastData(response.data.results);
-        })
+  if (typeof window !== 'undefined') {
+    const { podcasts, isLoading, isError } = usePodcast(debounceTitle)
+      if (podcasts != undefined){
+        setPodcastData(podcasts?.results)
       }
-    },
-    [debounceTitle]
-  )
+  }
+
 
   return(
     <>
