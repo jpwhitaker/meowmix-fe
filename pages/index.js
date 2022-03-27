@@ -6,10 +6,45 @@ import axios from 'axios'
 import {useDebounce} from 'use-debounce'
 
 
+const PodcastDisplay = function(podcast){
+  return (
+    <img src= {podcast.artworkUrl60} />
+  )
+}
+
 const SearchBox = function(){
 
   const [podcastTitle, setPodcastTitle] = useState('')
+  const [podcastData, setPodcastData] = useState([])
   const [debounceTitle] = useDebounce(podcastTitle, 500)
+  const [podcastResults, setPodcastResults] = useState([])  
+
+  const appleURL = `https://itunes.apple.com/search?`
+
+  useEffect(
+    () => {
+      axios.get(`${appleURL}entity=podcast&term=${debounceTitle}&limit=6`)
+      .then((response) => {
+        setPodcastData(response.data);
+      })
+    },
+    [debounceTitle]
+  )
+
+  useEffect(
+    () => {
+      setPodcastResults(
+        () => {
+          
+          return podcastData?.results?.map((podcast)=>{
+            
+            return PodcastDisplay(podcast)
+          })
+        }
+      )
+    },
+    [podcastData]
+  )
 
   return (
     <div>
@@ -19,12 +54,9 @@ const SearchBox = function(){
         onChange={(e) => {
           setPodcastTitle(e.target.value);
         }}
-
       ></input>
-      
-      <p>Actual value: {podcastTitle}</p>
-      <p>Debounce: {debounceTitle}</p>
 
+      <p>{podcastResults}</p>
     </div>
   )
 }
