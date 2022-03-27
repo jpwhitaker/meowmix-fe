@@ -2,7 +2,7 @@ import Head from 'next/head'
 import React, { useState, createContext } from 'react'
 import Layout, { siteTitle } from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
-import SearchBox from '../components/SearchBox'
+import SearchBox from '../components/search-box'
 import PodcastDisplay from '../components/podcast-results'
 
 export const PodcastContext = React.createContext({
