@@ -11,7 +11,7 @@ const fetcher = (...args) => fetch(...args).then(res => res.json())
 function usePodcast (searchTerm) {
 
 
-  const { data, error } = useSWR(`${appleURL}entity=podcast&term=${searchTerm}&limit=6&domain=${window.location.host}`, fetcher)
+  const { data, error } = useSWR(`${appleURL}entity=podcast&term=${searchTerm}&limit=6`, fetcher)
   return {
     podcasts: data,
     isLoading: !error && !data,

@@ -16,7 +16,6 @@ export default function PodcastResults() {
     () => {
       setPodcastResults(
         () => {
-          
           return podcastData?.map((podcast)=>{
             return PodcastDisplay(podcast)
           })
